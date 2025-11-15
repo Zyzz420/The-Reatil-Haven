@@ -1,36 +1,34 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Flutter Client
 
-## Getting Started
+This package hosts the Flutter rewrite of the Project Management Dashboard.  
+It mirrors the original Next.js UX with:
 
-First, run the development server:
+- Auth-less dashboard shell with sidebar + top bar, dark/light theme toggle, and responsive layout
+- Project analytics (charts), kanban board with drag & drop, list/table/timeline views, and creation dialogs
+- Search, users, teams, timeline, priority, and settings pages backed by the existing Node/Prisma API
+
+## Local development
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+flutter pub get
+cp .env.example .env   # configure API_BASE_URL + DEFAULT_USER_ID
+flutter run -d chrome  # or another supported device
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The `.env` file is parsed via `flutter_dotenv` at startup.  
+`DEFAULT_USER_ID` pre-selects a user for the priority page and navbar context switcher.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Useful commands
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- `flutter analyze` – static analysis (required to stay warning-free)
+- `flutter test` – widget tests (currently a smoke test for the app shell)
+- `flutter run -d chrome --web-renderer canvaskit` – closest to the original web build
 
-## Learn More
+## Project structure
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- `lib/app.dart` – `ProjectManagementApp` root
+- `lib/config/` – routing, theming, env config
+- `lib/data/` – DTOs and `ApiService` (Dio wrapper)
+- `lib/features/` – page-level UI modules
+- `lib/state/` – Riverpod providers (UI + data)
+- `lib/widgets/` – shared UI elements & dialogs
